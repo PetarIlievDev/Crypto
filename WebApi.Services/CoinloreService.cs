@@ -1,5 +1,6 @@
 ﻿namespace WebApi.Services
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using Infrastructure.RestClients.Interfaces;
@@ -21,33 +22,36 @@
             }
 
             var cryptoCyrencySymbol = initialBuyData.InitialBuyDataFromRequestList.Select(x => x.CryptoCurrencySymbol.ToUpperInvariant());
-            var coinsInfoList = await _coinloreClient.GetCoinsInfoAsync(null, ct);
+            var coinsInfo = await _coinloreClient.GetCoinsInfoAsync(null, ct);
 
-            if(coinsInfoList is null || coinsInfoList.Count == 0)
+            if(coinsInfo.Data.Count == 0)
             {
                 throw new Exception($"Guid: {initialBuyData.Guid}, LogMessage: No data received from Coinlore API");
             }
 
-            if (!cryptoCyrencySymbol.All(value => coinsInfoList.Select(x=>x.Symbol.ToUpperInvariant()).Contains(value)))
+            if (!cryptoCyrencySymbol.All(value => coinsInfo.Data.Select(x=>x.Symbol.ToUpperInvariant()).Contains(value.ToUpperInvariant())))
             {
                 do
                 {
                     var parameterValues = new Dictionary<string, string?>
                     {
-                        { "start", $"{coinsInfoList.Count}" },
+                        { "start", $"{coinsInfo.Data.Count}" },
                         { "limit", "100" }
                     };
-                    coinsInfoList.AddRange(await _coinloreClient.GetCoinsInfoAsync(parameterValues, ct));
-                } while (!cryptoCyrencySymbol.All(value => coinsInfoList.Select(x => x.Symbol.ToUpperInvariant()).Contains(value)));
+                    var newCoinsInfo = await _coinloreClient.GetCoinsInfoAsync(parameterValues, ct);
+                    coinsInfo.Data.AddRange(newCoinsInfo.Data);
+                } while (!cryptoCyrencySymbol.All(value => coinsInfo.Data.Select(x => x.Symbol.ToUpperInvariant()).Contains(value)) 
+                    && !(coinsInfo.Data.Count >= coinsInfo.TickerInfo.CoinsNum));
             }
 
-            _logService.LogToFile($"Guid: {initialBuyData.Guid}, LogMessage: All needed data recieved on {coinsInfoList.Count / 100} pages.");
+            _logService.LogToFile($"Guid: {initialBuyData.Guid}, LogMessage: All needed data recieved on {coinsInfo.Data.Count / 100} pages.");
 
             var result = new CalculatedOverallChangeFromInitialBuy();
 
             foreach (var item in initialBuyData.InitialBuyDataFromRequestList)
             {
-                var actualPrice = decimal.Parse(coinsInfoList.Where(x => x.Symbol == item.CryptoCurrencySymbol).Select(x => x.Price_usd).FirstOrDefault(), CultureInfo.InvariantCulture);
+                var actualPrice = decimal.Parse(coinsInfo.Data.Where(x => x.Symbol == item.CryptoCurrencySymbol)?.Select(x => x.Price_usd).FirstOrDefault() ?? "0", 
+                    CultureInfo.InvariantCulture);
                 result.CalculatedChangeFromInitialBuyList.Add(new CalculatedChangeFromInitialBuy
                 {
                     CryptoCurrency = item.CryptoCurrencySymbol,

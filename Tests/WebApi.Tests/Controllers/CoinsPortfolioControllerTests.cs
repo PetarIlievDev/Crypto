@@ -3,8 +3,10 @@ namespace WebApi.Tests.Controllers
     using AutoMapper;
     using Microsoft.Extensions.Logging;
     using NSubstitute;
+    using NSubstitute.ReturnsExtensions;
     using Webapi.Controllers;
     using WebApi.Services.Interfaces;
+    using WebApi.Services.Models.ChangeFromInitialBuy;
 
     public class CoinsPortfolioControllerTests
     {
@@ -23,9 +25,11 @@ namespace WebApi.Tests.Controllers
         }
 
         [Test]
-        public void Test1()
+        public async Task CalculatePercentageFromInitalBuyAsyncCallService()
         {
-            Assert.Pass();
+            await _coinsPortfolioController.CalculatePercentageFromInitalBuyAsync(null, CancellationToken.None);
+            _coinloreServiceMock.CalculateChangeFromInitialBuyAsync(Arg.Any<InitialBuyData>(), Arg.Any<CancellationToken>()).ReturnsNull();
+            await _coinloreServiceMock.Received(1).CalculateChangeFromInitialBuyAsync(Arg.Any<InitialBuyData>(), CancellationToken.None);
         }
     }
 }

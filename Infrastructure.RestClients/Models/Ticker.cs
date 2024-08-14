@@ -13,8 +13,8 @@
         public string Percent_change_7d { get; set; }
         public string Price_btc { get; set; }
         public string Market_cap_usd { get; set; }
-        public float Volume24 { get; set; }
-        public float Volume24a { get; set; }
+        public double Volume24 { get; set; }
+        public double Volume24a { get; set; }
         public string Csupply { get; set; }
         public string Tsupply { get; set; }
         public string Msupply { get; set; }

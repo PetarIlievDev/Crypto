@@ -9,6 +9,9 @@
 		"mutate": 
 		[
 			"!**/Program.cs"
+		],
+		"ignore-mutations": [
+			"string"
 		]
     }
 }
