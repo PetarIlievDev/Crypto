@@ -1,0 +1,14 @@
+{
+    "stryker-config":
+    {
+        "reporters": 
+		[
+			"progress",
+			"html"
+		],
+		"mutate": 
+		[
+			"!**/Program.cs"
+		]
+    }
+}
