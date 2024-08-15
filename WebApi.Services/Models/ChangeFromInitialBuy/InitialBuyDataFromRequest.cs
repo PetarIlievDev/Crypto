@@ -1,5 +1,8 @@
 ﻿namespace WebApi.Services.Models.ChangeFromInitialBuy
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [ExcludeFromCodeCoverage]
     public class InitialBuyDataFromRequest
     {
         public decimal NumberOfCoins { get; set; }

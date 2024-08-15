@@ -4,13 +4,9 @@
     using WebApi.Services.Interfaces;
     using WebApi.Services.Models.LogToFile;
 
-    public class LogService : ILogService
+    public class LogService(ILogger<LogService> logger) : ILogService
     {
-        private readonly ILogger<LogService> _logger;
-        public LogService(ILogger<LogService> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<LogService> _logger = logger;
 
         public void LogToFile(LogToFileData data)
         {

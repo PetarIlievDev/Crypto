@@ -1,6 +1,7 @@
 ﻿namespace Infrastructure.RestClients
 {
     using System;
+    using System.Net.Http;
     using System.Net.Http.Json;
     using Infrastructure.RestClients.Interfaces;
     using Infrastructure.RestClients.Models;
@@ -8,20 +9,21 @@
 
     public class CoinloreClient : ICoinloreClient
     {
+        private readonly HttpClient _httpClient;
         private readonly string COINLORE_API_PATH = "https://api.coinlore.net/";
         private readonly string TICKERS_PATH = "api/tickers/";
 
-        public CoinloreClient()
+        public CoinloreClient(HttpClient httpClient)
         {
+            _httpClient = httpClient;
         }
 
-        public async Task<List<Ticker>> GetCoinsInfoAsync(Dictionary<string, string?> paramValues, CancellationToken ct)
+        public async Task<TickersData> GetCoinsInfoAsync(Dictionary<string, string?> paramValues, CancellationToken ct)
         {
-
             var request = ComposeGetRequest(TICKERS_PATH, paramValues);
             using var response = await PerformGetRequestAsync(request, ct);
-            var tickers = await response.Content.ReadFromJsonAsync<BaseReponseModel<Ticker>>(ct);
-            return tickers?.Data ?? [];
+            var tickers = await response.Content.ReadFromJsonAsync<TickersData>(ct);
+            return tickers ?? new TickersData();
         }
 
         private Uri ComposeGetRequest(string resourcePath, Dictionary<string, string?> paramValues)
@@ -39,13 +41,11 @@
             return builder.Uri;
         }
 
-        private static async Task<HttpResponseMessage> PerformGetRequestAsync(Uri uri, CancellationToken ct)
-        {
-
-            using var httpClient = new HttpClient() { BaseAddress = uri};
+        private async Task<HttpResponseMessage> PerformGetRequestAsync(Uri uri, CancellationToken ct)
+        {            
             try
             {
-                var response = await httpClient.GetAsync(uri, ct);
+                var response = await _httpClient.GetAsync(uri, ct);
                 return response;
             }
             catch (Exception ex)

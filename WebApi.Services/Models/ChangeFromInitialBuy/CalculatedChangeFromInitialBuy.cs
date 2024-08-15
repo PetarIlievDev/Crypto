@@ -1,5 +1,8 @@
 ﻿namespace WebApi.Services.Models.ChangeFromInitialBuy
 {
+    using System.Diagnostics.CodeAnalysis;
+
+    [ExcludeFromCodeCoverage]
     public class CalculatedChangeFromInitialBuy
     {
         public required string CryptoCurrency { get; set; }

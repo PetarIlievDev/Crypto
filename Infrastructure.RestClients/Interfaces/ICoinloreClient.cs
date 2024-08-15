@@ -6,6 +6,6 @@
 
     public interface ICoinloreClient
     {
-        Task<List<Ticker>> GetCoinsInfoAsync(Dictionary<string, string?> paramValues, CancellationToken ct);
+        Task<TickersData> GetCoinsInfoAsync(Dictionary<string, string?> paramValues, CancellationToken ct);
     }
 }

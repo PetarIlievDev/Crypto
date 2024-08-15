@@ -1,7 +1,9 @@
 ﻿namespace WebApi.Services.Models.ChangeFromInitialBuy
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
+    [ExcludeFromCodeCoverage]
     public class InitialBuyData
     {
         public InitialBuyData()
