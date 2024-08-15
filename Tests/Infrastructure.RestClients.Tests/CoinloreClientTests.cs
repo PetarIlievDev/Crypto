@@ -121,7 +121,7 @@ namespace Infrastructure.RestClients.Tests
         }
 
         [Test]
-        public async Task GetCoinsInfoAsyncThrowException()
+        public void GetCoinsInfoAsyncThrowException()
         {
             var handler = new MockExceptionHttpMessageHandler(HttpStatusCode.OK, null);
             var client = new HttpClient(handler)
