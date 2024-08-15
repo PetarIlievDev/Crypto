@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid'
 const guid = uuidv4();
 
-const DynamicDelayAction = () => {
+const CryptoCoinsAction = () => {
     const [overall, setOveral] = useState();
     const [initialData, setinitialData] = useState();
     const [file, setFile] = useState();
@@ -92,7 +92,7 @@ const DynamicDelayAction = () => {
     }
 
     return (
-        <div><div>
+        <div>
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead style={{ backgroundColor: '#f0f0f0' }}>
                     <tr>
@@ -126,31 +126,41 @@ const DynamicDelayAction = () => {
                 </tbody>
             </table>
             <div>
-                Overall: {overall?.overallChangeInPercentage}%
+                <span style={{ fontWeight: 'bold' }}>Overall: </span>
+                <span>{overall?.overallChangeInPercentage}%</span>
             </div>
             <div>
-                Overall in USD: {overall?.overallChangeInPriceUsd}
+                <span style={{ fontWeight: 'bold' }}>Overall in USD: </span>
+                <span>{overall?.overallChangeInPriceUsd}</span>
             </div>
-        </div>
+            <br />
             <div>
-                <label>
+                <label style={{ paddingBottom: '10px' }}>
                     Delay Duration (seconds):
                     <input id="refreshRate" type="text" />
                 </label>
-                <button onClick={setDefaultValueButtonClick} disabled={isButtonDisabled}>Set Refresh interval to default</button>
-                <button onClick={handleButtonClick} disabled={isButtonDisabled}>Set Refresh interval</button>
+                <div className="row">
+                    <div className="col-sm-2">
+                        <button id="refresh" onClick={refreshButtonClick} disabled={isButtonDisabled}>Refresh</button>
+                    </div>
+                    <div className="col-sm-4">
+                        <button onClick={setDefaultValueButtonClick} disabled={isButtonDisabled}>Set Refresh interval to default</button>
+                    </div>
+                    <div className="col-sm-4">
+                        <button onClick={handleButtonClick} disabled={isButtonDisabled}>Set Refresh interval</button>
+                    </div>
+                </div>
             </div>
+            <br/>
             <div>
                 <input id="chooseFile_id" type="file" onChange={uploadFile} accept='.txt' />
             </div>
+            <br />
             <div>
                 Last updated at: {lastRefreshedAt}
             </div>
             <div>
                 Guid: {guid}
-            </div>
-            <div>
-                <button id="refresh" onClick={refreshButtonClick} disabled={isButtonDisabled}>Refresh</button>
             </div>
         </div>
     );
@@ -159,7 +169,7 @@ const DynamicDelayAction = () => {
 function App() {
     return (
         <div className="App">
-            <DynamicDelayAction />
+            <CryptoCoinsAction />
         </div>
     );
 }
