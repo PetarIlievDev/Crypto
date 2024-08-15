@@ -17,7 +17,7 @@ Crypto has 2 types of tests:
 
 
 ### Set up the testing
-* For setting up the unit test you have to load runsettings file, then run the tests. Would recommend to install [Fine Code Coverage](https://marketplace.visualstudio.com/items?itemName=FortuneNgwenya.FineCodeCoverage2022) extention, to be sure that the coverage format of the runsettings file fits to the Visualization of unit test code coverage.
+* For setting up the unit test you have to load runsettings file (available at `{Solution directory}\Tests\CodeCoverage.runsettings`), then run the tests. Would recommend to install [Fine Code Coverage](https://marketplace.visualstudio.com/items?itemName=FortuneNgwenya.FineCodeCoverage2022) extention, to be sure that the coverage format of the runsettings file fits to the Visualization of unit test code coverage.
 
 * For running the mutation testing:
   * Open `Comand prompt` and navigate to project(solution) directory.
